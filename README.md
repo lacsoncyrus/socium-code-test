@@ -12,6 +12,7 @@ After cloning a copy of this code test
      2. TestRunner.java - location src/test/java/Tools/TestRunner.java
      3. SeleniumGenericFunctions.java - location src/test/java/Tools/SeleniumGenericFunctions.java
      4. code_test.feature - location src/test/resources/Features/code_test.feature
+     5. code_page.java - location src/test/java/Page/code_page.java
 
 To run the program 
 1. Navigate to TestRunner.java and Run As JUNIT Test
