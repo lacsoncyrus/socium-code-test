@@ -27,6 +27,7 @@ public class code_page {
 	By By_dropdownCountry = By.id("GridFrow2fltCountry-awed");
 	By By_inputMeals = By.id("GridFrow2fltMeals-awed");
 	By By_dropdownChef = By.id("GridFrow2fltChef-awed");
+	By By_filterTable = By.id("GridFrow2");
 	
 	private boolean boolReturn = false;
 	
@@ -41,9 +42,9 @@ public class code_page {
 	{
 		try {
 		    driver.get(url);
-		    wait.until(ExpectedConditions.visibilityOf(driver.findElement(By_FullPage)));
+		    wait.until(ExpectedConditions.visibilityOfElementLocated(By_FullPage));
 		    js.executeScript("window.scrollBy(0,1000)", "");
-		    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		    wait.until(ExpectedConditions.visibilityOfElementLocated(By_filterTable));
 			boolReturn = true;
 			
 		} catch (NoSuchElementException e) {
@@ -54,7 +55,7 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyPersonNameIsInputted(String name)
+	public boolean setPersonName(String name)
 	{
 		try {
 			driver.findElement(By_inputPersonName).sendKeys(name,Keys.ENTER);
@@ -68,7 +69,7 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyFoodDropdownIsClickable()
+	public boolean clickFoodDropdown()
 	{
 		try {
 			driver.findElement(By_dropdownFood).click();
@@ -82,7 +83,7 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyFoodIsInputted(String food)
+	public boolean setFood(String food)
 	{
 		try {
 			driver.findElement(By_inputFood).sendKeys(food,Keys.ENTER);
@@ -96,7 +97,7 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyPriceIsInputted(Integer price)
+	public boolean setPrice(Integer price)
 	{
 		try {
 			driver.findElement(By_inputPrice).sendKeys(price.toString(),Keys.ENTER);
@@ -110,7 +111,7 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyDateIsInputted(String date)
+	public boolean setDate(String date)
 	{
 		try {
 			driver.findElement(By_inputDate).sendKeys(date,Keys.ENTER);
@@ -124,7 +125,7 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyCountryDropdownIsClicked()
+	public boolean clickCountryDropdown()
 	{
 		try {
 			driver.findElement(By_dropdownCountry).click();
@@ -138,15 +139,15 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyCountryOptionIsChosen(String country)
+	public boolean selectCountryOption(String country)
 	{
 		try {
 			By optionCountry = By.xpath("//*[@id=\"GridFrow2fltCountry-dropmenu\"]/div[2]/ul/li[contains(text(), \""+country+"\")]");
 			try {
-				wait.until(ExpectedConditions.presenceOfElementLocated(optionCountry)).click();
+				wait.until(ExpectedConditions.visibilityOfElementLocated(optionCountry)).click();
 			} catch(StaleElementReferenceException exception)
 			{
-				wait.until(ExpectedConditions.presenceOfElementLocated(optionCountry)).click();
+				wait.until(ExpectedConditions.visibilityOfElementLocated(optionCountry)).click();
 			}
 			boolReturn = true;
 			
@@ -158,7 +159,7 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyMealsAreInputted(String meal1, String meal2, String meal3)
+	public boolean setMeals(String meal1, String meal2, String meal3)
 	{
 		try {
 			driver.findElement(By_inputMeals).sendKeys(meal1,Keys.ENTER,meal2,Keys.ENTER,meal3,Keys.ENTER);
@@ -172,7 +173,7 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyChefDropdownIsClicked()
+	public boolean clickChefDropdown()
 	{
 		try {
 			driver.findElement(By_dropdownChef).click();
@@ -186,16 +187,16 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyChefOptionIsChosen(String chefName)
+	public boolean selectChefOption(String chefName)
 	{
 		try {
 			By optionChef = By.xpath("//*[@id=\"GridFrow2fltChef-dropmenu\"]/div[2]/ul/li[contains(text(), \""+chefName+"\")]");
 			
 			try {
-				wait.until(ExpectedConditions.presenceOfElementLocated(optionChef)).click();
+				wait.until(ExpectedConditions.visibilityOfElementLocated(optionChef)).click();
 			} catch(StaleElementReferenceException exception)
 			{
-				wait.until(ExpectedConditions.presenceOfElementLocated(optionChef)).click();
+				wait.until(ExpectedConditions.visibilityOfElementLocated(optionChef)).click();
 			}
 			boolReturn = true;
 			
@@ -207,32 +208,33 @@ public class code_page {
 		return boolReturn;
 	}
 	
-	public boolean verifyReturnedNameMatchesExpectedResult(String name)
+	public String getReturnedName(String name)
 	{
+		String returnedName = "";
 		try {
-			Assert.assertEquals(name, driver.findElement(By.xpath("//*[@id=\"GridFrow2\"]/div[3]/div[2]/div/table/tbody/tr/td[contains(text(), \""+name+"\")]")).getText());
-			boolReturn = true;
+			returnedName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"GridFrow2\"]/div[3]/div[2]/div/table/tbody/tr/td[contains(text(), \""+name+"\")]"))).getText();
 			
 		} catch (NoSuchElementException e) {
 
-			boolReturn = false;
+			returnedName = null;
 		}
 		
-		return boolReturn;
+		return returnedName;
 	}
 	
-	public boolean verifyReturnedDataIsEmpty(String data)
+	public String getReturnedData()
 	{
+		String returnedData = "";
 		try {
-			Assert.assertEquals(data, driver.findElement(By.xpath("//div[contains(@class, \"o-gempt\")]")).getText());
-			boolReturn = true;
+			
+			returnedData = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, \"o-gempt\")]"))).getText();
 			
 		} catch (NoSuchElementException e) {
 
-			boolReturn = false;
+			returnedData = null;
 		}
 		
-		return boolReturn;
+		return returnedData;
 	}
 
 }
