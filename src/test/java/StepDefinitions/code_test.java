@@ -5,9 +5,10 @@ package StepDefinitions;
 import org.junit.Assert;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 import Page.code_page;
+import Tools.ConfigReader;
+import Tools.DriverFactory;
 import Tools.SeleniumGenericFunctions;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -25,14 +26,17 @@ public class code_test {
 	
 	SeleniumGenericFunctions genericFunctions = new SeleniumGenericFunctions();
 	code_page codePage = null;
+	DriverFactory driverFactory = null;
+	String browser = "";
 	
 	@Before
-	public void setUpTest(Scenario s)
+	public void setUpTest(Scenario s) throws Throwable
 	{
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		screenshot = (TakesScreenshot)driver;
 		this.scn = s;
+		browser = ConfigReader.getBrowserType();
+		driverFactory = new DriverFactory();
+		driver = driverFactory.initializeDrivers(browser);
+		screenshot = (TakesScreenshot)driver;
 		codePage = new code_page(driver);
 		
 	}
